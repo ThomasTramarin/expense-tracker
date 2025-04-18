@@ -13,13 +13,20 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@types/helmet": "^0.0.48",
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
     "morgan": "^1.10.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/morgan": "^1.9.9",
     "rimraf": "^6.0.1",
