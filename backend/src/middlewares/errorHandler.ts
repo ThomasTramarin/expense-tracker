@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/ApiError";
+import { logger } from "../config/logger";
 
 interface ErrorResponseBody {
   statusCode: number;
@@ -39,6 +40,14 @@ export const errorHandler = (
   // If the NODE_ENV is development, add the stack trace to the response body
   if (!isProd && err.stack) {
     responseBody.stack = err.stack;
+  }
+
+  // Log only errors that are not instance of ApiError
+  if (!(err instanceof ApiError)) {
+    logger.error(`${req.method} ${req.originalUrl} - ${message}`, {
+      statusCode,
+      stack: err.stack,
+    });
   }
 
   res.status(statusCode).json(responseBody);
