@@ -12,4 +12,6 @@ services:
     ports:
       - 4000:4000
     command: npm run dev
+    environment:
+      - NODE_ENV=development
     env_file: ./backend/.env
