@@ -9,6 +9,7 @@ import { corsMiddleware } from "./middlewares/corsMiddleware";
 import helmet from "helmet";
 import compression from "compression";
 import { loginLimiter, rateLimiter } from "./middlewares/rateLimiterMiddleware";
+import prisma from "./config/prisma";
 
 dotenv.config();
 
@@ -25,13 +26,9 @@ app.use("/login", loginLimiter);
 app.get(
   "/",
   asyncHandler(async (req: Request, res: Response) => {
-    res.status(200).json({ message: "Hello World" });
+    res.status(200).json({ msg: "Hello world" });
   })
 );
-
-app.get("/login", (req: Request, res: Response) => {
-  res.status(200).json({ message: "Login route" });
-});
 
 app.use(errorHandler);
 
