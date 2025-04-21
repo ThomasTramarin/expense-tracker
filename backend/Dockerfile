@@ -14,6 +14,7 @@ RUN npx prisma generate
 
 COPY . .
 
+
 RUN npm run build
 
 
@@ -33,4 +34,4 @@ RUN npx prisma generate
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/index.js"]
+CMD ["npm", "start"]

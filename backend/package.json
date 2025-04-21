@@ -4,9 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "ts-node-dev --poll src/index.ts",
+    "migrate": "npx prisma migrate deploy",
+    "dev": "npm run migrate && ts-node-dev --poll src/index.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run migrate && node dist/index.js"
   },
   "keywords": [],
   "author": "",
