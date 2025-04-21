@@ -11,7 +11,7 @@ const logFormat = printf(({ timestamp, level, stack, message }) => {
 
 // config logger
 const logger = winston.createLogger({
-  level: "http", // default level
+  level: process.env.NODE_ENV === "development" ? "info" : "error", // default level
   format: combine(timestamp(), errors({ stack: true }), logFormat),
   transports: [
     new winston.transports.File({ filename: "logs/combined.log" }),

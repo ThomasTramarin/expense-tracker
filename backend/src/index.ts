@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import asyncHandler from "express-async-handler";
 import { errorHandler } from "./middlewares/errorHandler";
 import { ApiError } from "./utils/ApiError";
 import { logger } from "./config/logger";
@@ -9,7 +8,7 @@ import { corsMiddleware } from "./middlewares/corsMiddleware";
 import helmet from "helmet";
 import compression from "compression";
 import { loginLimiter, rateLimiter } from "./middlewares/rateLimiterMiddleware";
-import prisma from "./config/prisma";
+import authRouter from "./modules/auth/auth.routes";
 
 dotenv.config();
 
@@ -23,12 +22,7 @@ app.use(compression());
 app.use(rateLimiter);
 app.use("/login", loginLimiter);
 
-app.get(
-  "/",
-  asyncHandler(async (req: Request, res: Response) => {
-    res.status(200).json({ msg: "Hello world" });
-  })
-);
+app.use("/api/auth", authRouter);
 
 app.use(errorHandler);
 
