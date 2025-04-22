@@ -2,6 +2,7 @@ import { logger } from "../../config/logger";
 import prisma from "../../config/prisma";
 import { ApiError } from "../../utils/ApiError";
 import bcrypt from "bcryptjs";
+import { generateToken } from "../../utils/jwt";
 
 interface RegisterDTO {
   name: string;
@@ -9,7 +10,11 @@ interface RegisterDTO {
   password: string;
 }
 
-export const registerUser = async ({ name, email, password }: RegisterDTO) => {
+export const registerUser = async (
+  name: string,
+  email: string,
+  password: string
+) => {
   // Check if user with given email already exists
   const existingUser = await prisma.user.findUnique({
     where: { email },
@@ -37,5 +42,38 @@ export const registerUser = async ({ name, email, password }: RegisterDTO) => {
     id: user.id,
     name: user.name,
     email: user.email,
+  };
+};
+
+export const loginUser = async (email: string, password: string) => {
+  // Check if the user exists
+  const userExists = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!userExists) {
+    logger.info(`User not found, email: ${email}`);
+    throw new ApiError("Invalid credentials", 404);
+  }
+
+  // Check if the password is correct
+  const idPasswordCorrect = await bcrypt.compare(password, userExists.password);
+
+  if (!idPasswordCorrect) {
+    logger.info(`Invalid password, email: ${email}`);
+    throw new ApiError("Invalid credentials", 404);
+  }
+
+  // Generate a JWT token
+  const token = generateToken(userExists.id);
+
+  // Return the user
+  return {
+    id: userExists.id,
+    name: userExists.name,
+    email: userExists.email,
+    token,
   };
 };

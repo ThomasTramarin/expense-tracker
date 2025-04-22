@@ -17,3 +17,16 @@ export const registerSchema = Joi.object({
     "string.empty": "Name is required",
   }),
 });
+
+export const loginSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": "Invalid email format",
+    "any.required": "Email is required",
+    "string.empty": "Email is required",
+  }),
+  password: Joi.string().min(8).required().messages({
+    "string.min": "Password must be at least 8 characters",
+    "any.required": "Password is required",
+    "string.empty": "Password is required",
+  }),
+});
