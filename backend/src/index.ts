@@ -9,6 +9,7 @@ import helmet from "helmet";
 import compression from "compression";
 import { loginLimiter, rateLimiter } from "./middlewares/rateLimiterMiddleware";
 import authRouter from "./modules/auth/auth.routes";
+import prisma from "./config/prisma";
 
 dotenv.config();
 
@@ -20,9 +21,16 @@ app.use(corsMiddleware);
 app.use(helmet());
 app.use(compression());
 app.use(rateLimiter);
-app.use("/login", loginLimiter);
+app.use("/api/auth/login", loginLimiter);
 
 app.use("/api/auth", authRouter);
+
+app.get("/api/test/", async (req, res) => {
+  res.json({
+    message: "Test message",
+    success: true,
+  });
+});
 
 app.use(errorHandler);
 
